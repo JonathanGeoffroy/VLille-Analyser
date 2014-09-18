@@ -49,7 +49,7 @@ public class VLilleActivity extends Activity implements ActionBar.TabListener, S
 
         try {
             StationRequester task = new StationRequester();
-            stations = task.execute(StationRequester.URL).get();
+            stations = task.execute(StationRequester.ALL_STATIONS_URL).get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
