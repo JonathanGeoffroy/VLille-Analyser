@@ -1,7 +1,6 @@
 package com.jonathan.geoffroy.vlille_analyser.view.activity;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
@@ -16,15 +15,14 @@ import android.view.ViewGroup;
 
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
-import com.jonathan.geoffroy.vlille_analyser.model.request.StationRequester;
+import com.jonathan.geoffroy.vlille_analyser.model.request.AllStationsTask;
 import com.jonathan.geoffroy.vlille_analyser.view.fragment.StationFragment;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.concurrent.ExecutionException;
 
 
-public class VLilleActivity extends Activity implements ActionBar.TabListener, StationFragment.OnFragmentInteractionListener {
+public class VLilleActivity extends StationsActivity implements ActionBar.TabListener, StationFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -40,21 +38,16 @@ public class VLilleActivity extends Activity implements ActionBar.TabListener, S
      * The {@link ViewPager} that will host the section contents.
      */
     ViewPager mViewPager;
-    private ArrayList<Station> stations;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vlille);
 
-        try {
-            StationRequester task = new StationRequester();
-            stations = task.execute(StationRequester.ALL_STATIONS_URL).get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        stations = new ArrayList<Station>();
+        new AllStationsTask(this, stations).execute();
+
+
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -128,6 +121,11 @@ public class VLilleActivity extends Activity implements ActionBar.TabListener, S
     @Override
     public void onFragmentInteraction(String id) {
 
+    }
+
+    @Override
+    public void notifyStationsChanged() {
+        mSectionsPagerAdapter.notifyDataSetChanged();
     }
 
     /**
