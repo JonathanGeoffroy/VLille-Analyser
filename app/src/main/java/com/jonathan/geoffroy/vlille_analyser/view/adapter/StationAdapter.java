@@ -1,15 +1,18 @@
 package com.jonathan.geoffroy.vlille_analyser.view.adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
+import com.jonathan.geoffroy.vlille_analyser.view.activity.StationsActivity;
 
 import java.util.List;
 
@@ -19,11 +22,13 @@ import java.util.List;
 public class StationAdapter extends BaseAdapter {
     private List<Station> list;
     private LayoutInflater layoutInflater;
+    private StationsActivity context;
 
-
-    public StationAdapter(Context c, List<Station> l) {
+    public StationAdapter(Context c) {
         layoutInflater = LayoutInflater.from(c);
-        list = l;
+        StationsActivity activity = (StationsActivity) c;
+        list = activity.getStations();
+        context = activity;
     }
 
     public int getCount() {
@@ -38,8 +43,9 @@ public class StationAdapter extends BaseAdapter {
         return position;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ViewHolder viewHolder;
+    @Override
+    public View getView(final int position, View convertView, final ViewGroup parent) {
+        final ViewHolder viewHolder;
         if (convertView == null) {
             convertView = layoutInflater.inflate(R.layout.station_item_list, null);
 
@@ -49,14 +55,21 @@ public class StationAdapter extends BaseAdapter {
             viewHolder.nbFree = (TextView) convertView.findViewById(R.id.nbfree_textview);
             viewHolder.star = (ToggleButton) convertView.findViewById(R.id.star_toggle);
 
+            viewHolder.star.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    list.get(position).setStar(isChecked);
+                }
+            });
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
 
         Station station = list.get(position);
+        Log.i("John", "station " + station.getName() + "   " + station.isStar());
         viewHolder.name.setText(station.getName());
-        viewHolder.star.setSelected(station.isStar());
+        viewHolder.star.setChecked(station.isStar());
         viewHolder.nbBikes.setText(String.valueOf(station.getNbBikes()));
         viewHolder.nbFree.setText(String.valueOf(station.getNbFree()));
 

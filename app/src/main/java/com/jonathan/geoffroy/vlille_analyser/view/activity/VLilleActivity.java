@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -18,12 +19,18 @@ import com.jonathan.geoffroy.vlille_analyser.model.Station;
 import com.jonathan.geoffroy.vlille_analyser.model.request.AllStationsTask;
 import com.jonathan.geoffroy.vlille_analyser.view.fragment.StationFragment;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Locale;
 
 
 public class VLilleActivity extends StationsActivity implements ActionBar.TabListener, StationFragment.OnFragmentInteractionListener {
-
+    private static final String FILENAME = "stations";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -39,14 +46,14 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
      */
     ViewPager mViewPager;
 
+    private StationFragment stationFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vlille);
 
-        stations = new ArrayList<Station>();
-        new AllStationsTask(this, stations).execute();
-
+        loadStations();
 
         // Set up the action bar.
         final ActionBar actionBar = getActionBar();
@@ -83,6 +90,48 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        loadStations();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveStations();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadStations();
+    }
+
+    private void loadStations() {
+        try {
+            FileInputStream fis = openFileInput(FILENAME);
+            ObjectInputStream iis = new ObjectInputStream(fis);
+            stations = (ArrayList<Station>) iis.readObject();
+        } catch (Exception e) {
+            stations = new ArrayList<Station>();
+            new AllStationsTask(this, stations).execute();
+        }
+    }
+
+    private void saveStations() {
+        FileOutputStream fos;
+        try {
+            fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(stations);
+            oos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -119,13 +168,21 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     }
 
     @Override
-    public void onFragmentInteraction(String id) {
-
+    public void onAttachFragment(Fragment fragment) {
+        super.onAttachFragment(fragment);
+        if (fragment instanceof StationFragment) {
+            stationFragment = (StationFragment) fragment;
+        }
     }
 
     @Override
     public void notifyStationsChanged() {
-        mSectionsPagerAdapter.notifyDataSetChanged();
+        stationFragment.notifyStationsChanged();
+    }
+
+    @Override
+    public void onStarChecked(int position, boolean isChecked) {
+        stations.get(position).setStar(isChecked);
     }
 
     /**
@@ -177,7 +234,8 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch(position) {
                 case 0:
-                    return StationFragment.newInstance(stations);
+                    stationFragment = StationFragment.newInstance(stations);
+                    return stationFragment;
                 default:
                    return PlaceholderFragment.newInstance(position + 1);
             }

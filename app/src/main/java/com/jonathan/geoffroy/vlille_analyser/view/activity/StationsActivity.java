@@ -13,4 +13,8 @@ public abstract class StationsActivity extends Activity {
     protected ArrayList<Station> stations;
 
     public abstract void notifyStationsChanged();
+
+    public ArrayList<Station> getStations() {
+        return stations;
+    }
 }

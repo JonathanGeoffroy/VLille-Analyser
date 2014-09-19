@@ -1,7 +1,5 @@
 package com.jonathan.geoffroy.vlille_analyser.model.request;
 
-import android.util.Log;
-
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
 
 import org.apache.http.HttpEntity;
@@ -71,7 +69,6 @@ public class AllStationsParser {
                     break;
                 case XmlPullParser.END_TAG:
                     if (name.equals("marker")) {
-                        Log.i("StationRequester", "find a station");
                         parsedStation = new Station(
                                 Integer.parseInt(parser.getAttributeValue(null, "id")),
                                 parser.getAttributeValue(null, "name")

@@ -3,10 +3,12 @@ package com.jonathan.geoffroy.vlille_analyser.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
+
 /**
  * Created by geoffroy on 15/09/14.
  */
-public class Station implements Parcelable {
+public class Station implements Parcelable, Serializable {
     private int id;
     private String name;
     private boolean star;
@@ -17,6 +19,14 @@ public class Station implements Parcelable {
         this.id = id;
         this.name = name;
         this.star = false;
+    }
+
+    public Station(int id, String name, boolean star, int nbBikes, int nbFree) {
+        this.id = id;
+        this.name = name;
+        this.star = star;
+        this.nbBikes = nbBikes;
+        this.nbFree = nbFree;
     }
 
     public Station(Parcel parcel) {
