@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
@@ -17,7 +19,6 @@ import com.jonathan.geoffroy.vlille_analyser.model.request.StationDetailsTask;
 import com.jonathan.geoffroy.vlille_analyser.view.activity.StationsActivity;
 import com.jonathan.geoffroy.vlille_analyser.view.adapter.StationAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     private static final String ARG_STATIONS = "stations";
     private List<Station> stations;
 
-    private OnFragmentInteractionListener mListener;
+    private OnStationFragmentInteractionListener mListener;
 
     /**
      * The fragment's ListView/GridView.
@@ -54,7 +55,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     }
 
     // TODO: Rename and change types of parameters
-    public static StationFragment newInstance(ArrayList<Station> stations) {
+    public static StationFragment newInstance() {
         StationFragment fragment = new StationFragment();
         return fragment;
     }
@@ -77,6 +78,18 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
         // Set OnItemClickListener so we can be notified on item clicks
         mListView.setOnItemClickListener(this);
 
+        // Call onAutomaticRefreshStateChanged when user clicked on automatic_refresh checkbox
+        CheckBox automaticRefreshCheckbox = (CheckBox) view.findViewById(R.id.auto_refreshing_cb);
+        automaticRefreshCheckbox.setOnCheckedChangeListener(
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        mListener.onAutomaticRefreshChanged(isChecked);
+                    }
+                }
+        );
+        mListener.onAutomaticRefreshChanged(automaticRefreshCheckbox.isChecked());
+
         return view;
     }
 
@@ -89,7 +102,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (OnStationFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
@@ -125,9 +138,11 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    public interface OnStationFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onStarChecked(int position, boolean isChecked);
+        public void onStarChanged(int position, boolean isChecked);
+
+        public void onAutomaticRefreshChanged(boolean isChecked);
     }
 
 }

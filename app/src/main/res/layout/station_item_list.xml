@@ -16,14 +16,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ToggleButton
+        <CheckBox
             android:id="@+id/star_toggle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.1"
-            android:focusable="false"
-            android:textOff="Not Stared ..."
-            android:textOn="Stared!" />
+            android:button="@android:drawable/btn_star"
+            android:focusable="false" />
 
         <TextView
             android:id="@+id/nbbikes_textview"

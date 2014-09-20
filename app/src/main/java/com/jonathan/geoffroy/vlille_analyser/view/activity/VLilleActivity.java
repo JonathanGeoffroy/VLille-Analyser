@@ -16,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
+import com.jonathan.geoffroy.vlille_analyser.model.refresher.AllStationsDetailsRefresher;
+import com.jonathan.geoffroy.vlille_analyser.model.refresher.StationDetailsRefresher;
 import com.jonathan.geoffroy.vlille_analyser.model.request.AllStationsTask;
 import com.jonathan.geoffroy.vlille_analyser.view.fragment.StationFragment;
 
@@ -29,8 +31,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class VLilleActivity extends StationsActivity implements ActionBar.TabListener, StationFragment.OnFragmentInteractionListener {
+public class VLilleActivity extends StationsActivity implements ActionBar.TabListener, StationFragment.OnStationFragmentInteractionListener {
     private static final String FILENAME = "stations";
+    private static final short TIME_TO_REFRESH_STATIONS = 10;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -47,6 +50,8 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     ViewPager mViewPager;
 
     private StationFragment stationFragment;
+
+    private StationDetailsRefresher refresher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,12 +93,6 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
                             .setText(mSectionsPagerAdapter.getPageTitle(i))
                             .setTabListener(this));
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        loadStations();
     }
 
     @Override
@@ -181,8 +180,18 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     }
 
     @Override
-    public void onStarChecked(int position, boolean isChecked) {
+    public void onStarChanged(int position, boolean isChecked) {
         stations.get(position).setStar(isChecked);
+    }
+
+    @Override
+    public void onAutomaticRefreshChanged(boolean isChecked) {
+        if (isChecked) {
+            refresher = new AllStationsDetailsRefresher(this);
+            refresher.enableRefreshing(TIME_TO_REFRESH_STATIONS);
+        } else if (refresher != null) {
+            refresher.disableRefreshing();
+        }
     }
 
     /**
@@ -234,7 +243,7 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
             // Return a PlaceholderFragment (defined as a static inner class below).
             switch(position) {
                 case 0:
-                    stationFragment = StationFragment.newInstance(stations);
+                    stationFragment = StationFragment.newInstance();
                     return stationFragment;
                 default:
                    return PlaceholderFragment.newInstance(position + 1);

@@ -1,14 +1,13 @@
 package com.jonathan.geoffroy.vlille_analyser.view.adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
@@ -53,7 +52,7 @@ public class StationAdapter extends BaseAdapter {
             viewHolder.name = (TextView) convertView.findViewById(R.id.name_textview);
             viewHolder.nbBikes = (TextView) convertView.findViewById(R.id.nbbikes_textview);
             viewHolder.nbFree = (TextView) convertView.findViewById(R.id.nbfree_textview);
-            viewHolder.star = (ToggleButton) convertView.findViewById(R.id.star_toggle);
+            viewHolder.star = (CheckBox) convertView.findViewById(R.id.star_toggle);
 
             viewHolder.star.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -67,7 +66,6 @@ public class StationAdapter extends BaseAdapter {
         }
 
         Station station = list.get(position);
-        Log.i("John", "station " + station.getName() + "   " + station.isStar());
         viewHolder.name.setText(station.getName());
         viewHolder.star.setChecked(station.isStar());
         viewHolder.nbBikes.setText(String.valueOf(station.getNbBikes()));
@@ -78,7 +76,7 @@ public class StationAdapter extends BaseAdapter {
 
     private class ViewHolder {
         private TextView name;
-        private ToggleButton star;
+        private CheckBox star;
         private TextView nbBikes;
         private TextView nbFree;
 

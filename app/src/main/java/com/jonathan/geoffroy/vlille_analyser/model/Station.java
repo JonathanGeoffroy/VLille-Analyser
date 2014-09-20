@@ -1,14 +1,11 @@
 package com.jonathan.geoffroy.vlille_analyser.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**
  * Created by geoffroy on 15/09/14.
  */
-public class Station implements Parcelable, Serializable {
+public class Station implements Serializable {
     private int id;
     private String name;
     private boolean star;
@@ -19,38 +16,6 @@ public class Station implements Parcelable, Serializable {
         this.id = id;
         this.name = name;
         this.star = false;
-    }
-
-    public Station(int id, String name, boolean star, int nbBikes, int nbFree) {
-        this.id = id;
-        this.name = name;
-        this.star = star;
-        this.nbBikes = nbBikes;
-        this.nbFree = nbFree;
-    }
-
-    public Station(Parcel parcel) {
-        id = parcel.readInt();
-        name = parcel.readString();
-        nbBikes = parcel.readInt();
-        nbFree = parcel.readInt();
-        star = parcel.readByte() != 0;
-    }
-
-    public int getNbBikes() {
-        return nbBikes;
-    }
-
-    public void setNbBikes(int nbBikes) {
-        this.nbBikes = nbBikes;
-    }
-
-    public int getNbFree() {
-        return nbFree;
-    }
-
-    public void setNbFree(int nbFree) {
-        this.nbFree = nbFree;
     }
 
     public int getId() {
@@ -77,17 +42,19 @@ public class Station implements Parcelable, Serializable {
         this.star = star;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public int getNbBikes() {
+        return nbBikes;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(name);
-        parcel.writeInt(nbBikes);
-        parcel.writeInt(nbFree);
-        parcel.writeByte((byte) (star ? 1 : 0));
+    public void setNbBikes(int nbBikes) {
+        this.nbBikes = nbBikes;
+    }
+
+    public int getNbFree() {
+        return nbFree;
+    }
+
+    public void setNbFree(int nbFree) {
+        this.nbFree = nbFree;
     }
 }

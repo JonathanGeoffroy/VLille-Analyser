@@ -1,5 +1,7 @@
 package com.jonathan.geoffroy.vlille_analyser.model.request;
 
+import android.util.Log;
+
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
 import com.jonathan.geoffroy.vlille_analyser.view.activity.StationsActivity;
 
@@ -21,6 +23,7 @@ public class StationDetailsTask extends StationTask {
 
     @Override
     protected Void doInBackground(Void... voids) {
+        Log.i("VLille-Http", "try to find info for " + station.getName());
         StationDetailsParser stationDetailParser = new StationDetailsParser(new DefaultHttpClient());
         try {
             stationDetailParser.execute(station);
