@@ -18,6 +18,14 @@ public class Station implements Serializable {
         this.star = false;
     }
 
+    public Station(int id, String name, boolean star, int nbBikes, int nbFree) {
+        this.id = id;
+        this.name = name;
+        this.star = star;
+        this.nbBikes = nbBikes;
+        this.nbFree = nbFree;
+    }
+
     public int getId() {
         return id;
     }

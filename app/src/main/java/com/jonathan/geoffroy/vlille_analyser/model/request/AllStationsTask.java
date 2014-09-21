@@ -43,7 +43,7 @@ public class AllStationsTask extends StationTask {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        activity.notifyStationsChanged();
+        activity.notifyStationsAdded();
 //        for (Station s : stations) {
 //            new StationDetailsTask(activity, s).execute();
 //        }
