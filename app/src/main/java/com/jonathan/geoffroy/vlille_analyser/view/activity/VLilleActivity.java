@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -16,22 +15,16 @@ import android.view.ViewGroup;
 
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
+import com.jonathan.geoffroy.vlille_analyser.model.db.StationsDbHelper;
 import com.jonathan.geoffroy.vlille_analyser.model.refresher.AllStationsDetailsRefresher;
 import com.jonathan.geoffroy.vlille_analyser.model.refresher.StationDetailsRefresher;
 import com.jonathan.geoffroy.vlille_analyser.model.request.AllStationsTask;
 import com.jonathan.geoffroy.vlille_analyser.view.fragment.StationFragment;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Locale;
 
 
-public class VLilleActivity extends StationsActivity implements ActionBar.TabListener, StationFragment.OnStationFragmentInteractionListener {
+public class VLilleActivity extends StationsActivity implements ActionBar.TabListener {
     private static final String FILENAME = "stations";
     private static final short TIME_TO_REFRESH_STATIONS = 10;
     /**
@@ -58,6 +51,7 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_vlille);
 
+        db = new StationsDbHelper(this);
         loadStations();
 
         // Set up the action bar.
@@ -98,7 +92,6 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     @Override
     protected void onPause() {
         super.onPause();
-        saveStations();
     }
 
     @Override
@@ -108,28 +101,16 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     }
 
     private void loadStations() {
-        try {
-            FileInputStream fis = openFileInput(FILENAME);
-            ObjectInputStream iis = new ObjectInputStream(fis);
-            stations = (ArrayList<Station>) iis.readObject();
-        } catch (Exception e) {
-            stations = new ArrayList<Station>();
+        stations = db.getAllStations();
+
+        // No station found in DB: try using internet
+        if (stations.isEmpty()) {
             new AllStationsTask(this, stations).execute();
         }
     }
 
     private void saveStations() {
-        FileOutputStream fos;
-        try {
-            fos = openFileOutput(FILENAME, Context.MODE_PRIVATE);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(stations);
-            oos.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        db.addStations(stations);
     }
 
     @Override
@@ -174,14 +155,23 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
         }
     }
 
+
     @Override
-    public void notifyStationsChanged() {
+    public void notifyStationsAdded() {
         stationFragment.notifyStationsChanged();
+        saveStations();
     }
 
     @Override
-    public void onStarChanged(int position, boolean isChecked) {
-        stations.get(position).setStar(isChecked);
+    public void notifyStationsUpdated(Station station) {
+        stationFragment.notifyStationsChanged();
+        db.updateStation(station);
+    }
+
+    @Override
+    public void onStarChanged(Station station, boolean isChecked) {
+        station.setStar(isChecked);
+        db.updateStation(station);
     }
 
     @Override

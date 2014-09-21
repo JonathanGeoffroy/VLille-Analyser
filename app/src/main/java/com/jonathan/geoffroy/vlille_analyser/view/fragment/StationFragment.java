@@ -140,7 +140,7 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
      */
     public interface OnStationFragmentInteractionListener {
         // TODO: Update argument type and name
-        public void onStarChanged(int position, boolean isChecked);
+        public void onStarChanged(Station position, boolean isChecked);
 
         public void onAutomaticRefreshChanged(boolean isChecked);
     }

@@ -34,4 +34,10 @@ public class StationDetailsTask extends StationTask {
         }
         return null;
     }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        activity.notifyStationsUpdated(station);
+    }
 }

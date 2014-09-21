@@ -13,10 +13,4 @@ public abstract class StationTask extends AsyncTask<Void, Void, Void> {
     protected StationTask(StationsActivity activity) {
         this.activity = activity;
     }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        activity.notifyStationsChanged();
-    }
 }

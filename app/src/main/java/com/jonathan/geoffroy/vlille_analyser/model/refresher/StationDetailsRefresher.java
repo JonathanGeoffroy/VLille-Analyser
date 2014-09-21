@@ -34,8 +34,7 @@ public abstract class StationDetailsRefresher extends Timer {
         timerTask.run();
 
         // Schedule every nbSeconds
-        this.schedule(
-                timerTask, nbSeconds * 1000);
+        this.schedule(timerTask, nbSeconds * 1000);
     }
 
     public void disableRefreshing() {

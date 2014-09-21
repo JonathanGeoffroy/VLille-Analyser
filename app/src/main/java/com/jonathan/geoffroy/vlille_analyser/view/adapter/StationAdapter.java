@@ -56,7 +56,7 @@ public class StationAdapter extends BaseAdapter {
 
             viewHolder.star.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    list.get(position).setStar(isChecked);
+                    context.onStarChanged(list.get(position), isChecked);
                 }
             });
 
