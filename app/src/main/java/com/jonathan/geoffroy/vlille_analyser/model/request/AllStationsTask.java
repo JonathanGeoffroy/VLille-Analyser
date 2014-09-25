@@ -44,8 +44,5 @@ public class AllStationsTask extends StationTask {
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
         activity.notifyStationsAdded();
-//        for (Station s : stations) {
-//            new StationDetailsTask(activity, s).execute();
-//        }
     }
 }

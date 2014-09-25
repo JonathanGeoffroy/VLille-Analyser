@@ -1,7 +1,5 @@
 package com.jonathan.geoffroy.vlille_analyser.model.refresher;
 
-import android.util.Log;
-
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
 import com.jonathan.geoffroy.vlille_analyser.model.request.StationDetailsTask;
 import com.jonathan.geoffroy.vlille_analyser.view.activity.StationsActivity;
@@ -25,7 +23,6 @@ public abstract class StationDetailsRefresher extends Timer {
             @Override
             public void run() {
                 for (Station station : getStationsToRefresh()) {
-                    Log.i("VLille-Http", "" + station.getName() + " star? " + station.isStar());
                     new StationDetailsTask(activity, station).execute();
                 }
             }

@@ -74,6 +74,11 @@ public class StationAdapter extends BaseAdapter {
         return convertView;
     }
 
+    public void setList(List<Station> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     private class ViewHolder {
         private TextView name;
         private CheckBox star;
@@ -83,6 +88,4 @@ public class StationAdapter extends BaseAdapter {
         public ViewHolder() {
         }
     }
-
-
 }

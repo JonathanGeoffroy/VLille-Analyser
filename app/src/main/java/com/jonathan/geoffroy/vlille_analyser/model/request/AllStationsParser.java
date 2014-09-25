@@ -71,7 +71,9 @@ public class AllStationsParser {
                     if (name.equals("marker")) {
                         parsedStation = new Station(
                                 Integer.parseInt(parser.getAttributeValue(null, "id")),
-                                parser.getAttributeValue(null, "name")
+                                parser.getAttributeValue(null, "name"),
+                                Double.parseDouble(parser.getAttributeValue(null, "lat")),
+                                Double.parseDouble(parser.getAttributeValue(null, "lng"))
                         );
                         stations.add(parsedStation);
                     }

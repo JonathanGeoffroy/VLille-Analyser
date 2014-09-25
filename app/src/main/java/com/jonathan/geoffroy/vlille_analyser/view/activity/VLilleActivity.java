@@ -7,25 +7,28 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
+import com.jonathan.geoffroy.vlille_analyser.model.StationOrderBy;
 import com.jonathan.geoffroy.vlille_analyser.model.db.StationsDbHelper;
 import com.jonathan.geoffroy.vlille_analyser.model.refresher.AllStationsDetailsRefresher;
 import com.jonathan.geoffroy.vlille_analyser.model.refresher.StationDetailsRefresher;
 import com.jonathan.geoffroy.vlille_analyser.model.request.AllStationsTask;
+import com.jonathan.geoffroy.vlille_analyser.view.fragment.GoogleMapFragment;
 import com.jonathan.geoffroy.vlille_analyser.view.fragment.StationFragment;
 
 import java.util.Locale;
 
-
+// christophe.ribeiro@inria.fr
+// Deadline: lundi 29
+// XP Android ?
+// Screen-shots,
+// lien github
 public class VLilleActivity extends StationsActivity implements ActionBar.TabListener {
-    private static final String FILENAME = "stations";
     private static final short TIME_TO_REFRESH_STATIONS = 10;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -43,6 +46,7 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     ViewPager mViewPager;
 
     private StationFragment stationFragment;
+    private GoogleMapFragment googleMapFragment;
 
     private StationDetailsRefresher refresher;
 
@@ -110,7 +114,7 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     }
 
     private void saveStations() {
-        db.addStations(stations);
+        db.saveStations(stations);
     }
 
     @Override
@@ -152,6 +156,8 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
         super.onAttachFragment(fragment);
         if (fragment instanceof StationFragment) {
             stationFragment = (StationFragment) fragment;
+        } else if (fragment instanceof GoogleMapFragment) {
+            googleMapFragment = (GoogleMapFragment) fragment;
         }
     }
 
@@ -159,13 +165,25 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     @Override
     public void notifyStationsAdded() {
         stationFragment.notifyStationsChanged();
+        googleMapFragment.notifyStationsChanged();
         saveStations();
     }
 
     @Override
-    public void notifyStationsUpdated(Station station) {
+    public void notifyStationUpdated(Station station) {
         stationFragment.notifyStationsChanged();
+        googleMapFragment.notifyStationsChanged();
         db.updateStation(station);
+    }
+
+    @Override
+    public void notifyAllStationsUpdated() {
+        Log.i("VLille-IHM", "All stations have been updated");
+        stationFragment.notifyStationsChanged();
+        googleMapFragment.notifyStationsChanged();
+        for (Station station : stations) {
+            db.updateStation(station);
+        }
     }
 
     @Override
@@ -176,6 +194,7 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
 
     @Override
     public void onAutomaticRefreshChanged(boolean isChecked) {
+        Log.i("VLille-IHM", "AutomaticRefreshChanged");
         if (isChecked) {
             refresher = new AllStationsDetailsRefresher(this);
             refresher.enableRefreshing(TIME_TO_REFRESH_STATIONS);
@@ -184,37 +203,19 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
+    @Override
+    public void onOrderByChanged(StationOrderBy orderBy) {
 
-        public PlaceholderFragment() {
-        }
+    }
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
+    @Override
+    public void onOnlyStarChanged(boolean isChecked) {
+        if (!isChecked) {
+            stations = db.getAllStations();
+        } else {
+            stations = db.getStarredStations();
         }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_vlille, container, false);
-            return rootView;
-        }
+        notifyAllStationsUpdated();
     }
 
     /**
@@ -235,15 +236,16 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
                 case 0:
                     stationFragment = StationFragment.newInstance();
                     return stationFragment;
+                case 1:
+                    return GoogleMapFragment.newInstance();
                 default:
-                   return PlaceholderFragment.newInstance(position + 1);
+                    throw new RuntimeException("fragment at position " + position + " is not allowed");
             }
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            return 2;
         }
 
         @Override
@@ -254,8 +256,6 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
                     return getString(R.string.title_section1).toUpperCase(l);
                 case 1:
                     return getString(R.string.title_section2).toUpperCase(l);
-                case 2:
-                    return getString(R.string.title_section3).toUpperCase(l);
             }
             return null;
         }

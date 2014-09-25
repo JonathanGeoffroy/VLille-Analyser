@@ -1,5 +1,7 @@
 package com.jonathan.geoffroy.vlille_analyser.model;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 /**
@@ -12,18 +14,22 @@ public class Station implements Serializable {
     private int nbBikes;
     private int nbFree;
 
-    public Station(int id, String name) {
-        this.id = id;
-        this.name = name;
-        this.star = false;
-    }
+    private LatLng position;
 
-    public Station(int id, String name, boolean star, int nbBikes, int nbFree) {
+    public Station(int id, String name, boolean star, int nbBikes, int nbFree, LatLng position) {
         this.id = id;
         this.name = name;
         this.star = star;
         this.nbBikes = nbBikes;
         this.nbFree = nbFree;
+        this.position = position;
+    }
+
+    public Station(int id, String name, double lat, double lng) {
+        this.id = id;
+        this.name = name;
+        this.star = false;
+        this.position = new LatLng(lat, lng);
     }
 
     public int getId() {
@@ -64,5 +70,13 @@ public class Station implements Serializable {
 
     public void setNbFree(int nbFree) {
         this.nbFree = nbFree;
+    }
+
+    public LatLng getPosition() {
+        return position;
+    }
+
+    public void setPosition(LatLng position) {
+        this.position = position;
     }
 }
