@@ -1,6 +1,5 @@
 package com.jonathan.geoffroy.vlille_analyser.view.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,15 +20,10 @@ import java.util.List;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link GoogleMapFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link GoogleMapFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment permettant d'afficher les stations dans une MapView<br/>
+ * Chaque station est représentée par un marqueur
  */
 public class GoogleMapFragment extends Fragment {
-    private OnFragmentInteractionListener mListener;
     private MapView mapView;
     private List<Marker> markers;
 
@@ -129,20 +123,8 @@ public class GoogleMapFragment extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-        try {
-            mListener = (OnFragmentInteractionListener) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
 

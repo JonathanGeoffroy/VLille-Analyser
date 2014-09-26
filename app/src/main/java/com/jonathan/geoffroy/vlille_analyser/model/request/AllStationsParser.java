@@ -19,12 +19,13 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 /**
+ * Parse le XML de VLille permettant de récupérer les informations sur toutes les stations<br/>
+ * <p/>
  * Created by geoffroy on 15/09/14.
  */
 public class AllStationsParser {
 
-    public static final String ALL_STATIONS_URL = "http://www.vlille.fr/stations/xml-stations.aspx",
-            STATION_DETAILS_URL = "http://www.vlille.fr/stations/xml-station.aspx?borne=";
+    public static final String ALL_STATIONS_URL = "http://www.vlille.fr/stations/xml-stations.aspx";
 
     private HttpClient client;
 
@@ -32,6 +33,14 @@ public class AllStationsParser {
         this.client = client;
     }
 
+    /**
+     * Lance une réquête sur <code>ALL_STATIONS_URL</code>.<br/>
+     * Parse les données XML récupérées afin de trouver toutes les stations VLille
+     *
+     * @param stations l'ensemble des stations VLille
+     * @throws IOException            en cas de problème réseau
+     * @throws XmlPullParserException si il est impossible de parser le résultat obtenu
+     */
     public void execute(List<Station> stations) throws IOException, XmlPullParserException {
         HttpGet httpGet = new HttpGet(ALL_STATIONS_URL);
         HttpResponse response = client.execute(httpGet);
@@ -59,6 +68,14 @@ public class AllStationsParser {
         }
     }
 
+    /**
+     * Parse toutes les stations
+     *
+     * @param parser
+     * @param stations l'ensemble des stations VLille
+     * @throws XmlPullParserException
+     * @throws IOException
+     */
     private void parseAllStations(XmlPullParser parser, List<Station> stations) throws XmlPullParserException, IOException {
         Station parsedStation;
         int event = parser.getEventType();

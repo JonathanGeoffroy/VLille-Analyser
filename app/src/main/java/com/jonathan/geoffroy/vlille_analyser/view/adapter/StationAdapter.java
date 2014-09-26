@@ -16,6 +16,7 @@ import com.jonathan.geoffroy.vlille_analyser.view.activity.StationsActivity;
 import java.util.List;
 
 /**
+ * Adapter permettant d'afficher dans une liste l'ensemble des stations
  * Created by geoffroy on 15/09/14.
  */
 public class StationAdapter extends BaseAdapter {

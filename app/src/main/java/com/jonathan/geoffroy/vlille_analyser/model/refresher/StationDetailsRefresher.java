@@ -9,6 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * Timer permettant de différer le rafraichissement automatique des données d'une station<br/>
+ * Lance des requêtes HTTP automatiquement afin de récupèrer les données sur le serveur VLille<br/>
  * Created by jonathan on 20/09/14.
  */
 public abstract class StationDetailsRefresher extends Timer {

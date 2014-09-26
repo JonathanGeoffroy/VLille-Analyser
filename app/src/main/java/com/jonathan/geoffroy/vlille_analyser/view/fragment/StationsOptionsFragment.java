@@ -17,12 +17,9 @@ import static android.view.View.OnClickListener;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link StationsOptionsFragment.OnOptionsFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link StationsOptionsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment permettant de choisir les options d'affichage de la liste des stations:
+ *  * ORDER BY
+ *  * juste les favoris ?
  */
 public class StationsOptionsFragment extends Fragment {
 
@@ -109,10 +106,23 @@ public class StationsOptionsFragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnOptionsFragmentInteractionListener {
+        /**
+         * appelé lorsque le rafraichissement automatique change de position
+         *
+         * @param isChecked si le rafraichissement automatique est activé
+         */
         void onAutomaticRefreshChanged(boolean isChecked);
 
+        /**
+         * Appelé lorsque la façon d'ordonner doit être changé
+         * @param orderBy la nouvelle façon d'ordonner la liste des stations
+         */
         void onOrderByChanged(StationOrderBy orderBy);
 
+        /**
+         * Appelé lorsque "n'afficher que les favoris" change de positions
+         * @param isChecked si il faut n'afficher que les favoris
+         */
         void onOnlyStarChanged(boolean isChecked);
     }
 

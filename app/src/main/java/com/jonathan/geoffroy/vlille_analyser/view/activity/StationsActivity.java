@@ -17,12 +17,27 @@ public abstract class StationsActivity extends Activity implements StationFragme
     protected ArrayList<Station> stations;
     protected StationsDbHelper db;
 
+    /**
+     * Appelé lorsque toutes les stations ont été ajoutés
+     */
     public abstract void notifyStationsAdded();
 
+    /**
+     * Appelé lorsqu'une station a été modifiée.
+     *
+     * @param station la station modifiée
+     */
     public abstract void notifyStationUpdated(Station station);
 
+    /**
+     * Appelé lorsque toutes les stations ont été modifiés.
+     */
     public abstract void notifyAllStationsUpdated();
 
+    /**
+     *
+     * @return La liste des stations à afficher
+     */
     public ArrayList<Station> getStations() {
         return stations;
     }

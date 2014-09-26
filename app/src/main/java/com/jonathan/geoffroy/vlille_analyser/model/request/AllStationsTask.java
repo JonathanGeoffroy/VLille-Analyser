@@ -11,6 +11,7 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import java.util.List;
 
 /**
+ * Exécute <code>AllStationParser.execute()</code> dans un Thread secondaire, afin de ne pas bloquer l'interface graphique<br/>
  * Created by geoffroy on 19/09/14.
  */
 public class AllStationsTask extends StationTask {

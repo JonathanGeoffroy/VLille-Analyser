@@ -3,6 +3,8 @@ package com.jonathan.geoffroy.vlille_analyser.model.db;
 import android.provider.BaseColumns;
 
 /**
+ * Contrat de la base de données
+ * Permet de formatter les données pour les ajouter / récupérer dans la base de données
  * Created by jonathan on 20/09/14.
  */
 public class StationContract {

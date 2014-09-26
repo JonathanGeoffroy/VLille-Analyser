@@ -6,12 +6,21 @@ import com.jonathan.geoffroy.vlille_analyser.view.activity.StationsActivity;
 import java.util.List;
 
 /**
+ * Rafraichi automatiquement l'ensemble des stations en récupérant les données sur le serveur VLille toutes les <code>DEFAULT_NB_STATIONS_TO_REFRESH</code> secondes.<br/>
+ * Plus précisément, lance <code>nbStationsToRefresh</code> requêtes toutes les <code>DEFAULT_NB_STATIONS_TO_REFRESH</code> afin de récupérer les détails sans lancer trop de requêtes en même temps.
  * Created by jonathan on 20/09/14.
  */
 public class AllStationsDetailsRefresher extends StationDetailsRefresher {
     private static final int DEFAULT_NB_STATIONS_TO_REFRESH = 20;
+    /**
+     * la dernière station non updatée
+     */
     private int stationPosition;
+    /**
+     * Le nombre de stations à rafraichir en même temps
+     */
     private int nbStationsToRefresh;
+
     public AllStationsDetailsRefresher(StationsActivity activity) {
         super(activity);
         stationPosition = 0;

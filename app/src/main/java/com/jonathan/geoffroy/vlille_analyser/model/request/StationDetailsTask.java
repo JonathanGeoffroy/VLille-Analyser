@@ -9,6 +9,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 
 /**
+ * Exécute <code>StationDetailsParser.execute()</code> dans un Thread secondaire, afin de ne pas bloquer l'interface graphique<br/>
  * Created by geoffroy on 19/09/14.
  */
 public class StationDetailsTask extends StationTask {

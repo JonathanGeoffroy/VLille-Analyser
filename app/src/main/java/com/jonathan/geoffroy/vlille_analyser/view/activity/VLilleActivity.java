@@ -103,6 +103,10 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
         loadStations();
     }
 
+    /**
+     * Récupère les stations sauvegardés dans la base de données<br/>
+     * Si la base de données est vide, va récupèrer les données sur le site de VLille
+     */
     private void loadStations() {
         stations = db.getAllStations();
 
@@ -112,6 +116,9 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
         }
     }
 
+    /**
+     * Sauvegarde toutes les stations dans la base de données
+     */
     private void saveStations() {
         db.saveStations(stations);
     }

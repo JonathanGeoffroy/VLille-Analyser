@@ -5,6 +5,7 @@ import com.google.android.gms.maps.model.LatLng;
 import java.io.Serializable;
 
 /**
+ * Modèle d'une station.
  * Created by geoffroy on 15/09/14.
  */
 public class Station implements Serializable {
@@ -13,7 +14,6 @@ public class Station implements Serializable {
     private boolean star;
     private int nbBikes;
     private int nbFree;
-
     private LatLng position;
 
     public Station(int id, String name, boolean star, int nbBikes, int nbFree, LatLng position) {

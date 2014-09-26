@@ -24,10 +24,13 @@ import static com.jonathan.geoffroy.vlille_analyser.model.db.StationContract.Sta
 import static com.jonathan.geoffroy.vlille_analyser.model.db.StationContract.StationEntry.TABLE_NAME;
 
 /**
+ * Base de données permettant de garder en mémoire puis récupérer les données sur les stations
+ * Chaque méthode permet de récupèrer les données en fonction d'options de l'IHM
+ * * n'afficher que les favoris?
+ * * ordonner les données par nom? par favoris?
  * Created by jonathan on 20/09/14.
  */
 public class StationsDbHelper extends SQLiteOpenHelper {
-    // If you change the database schema, you must increment the database version.
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "FeedReader.db";
     private static final String DATABASE_CREATE = "CREATE TABLE " + TABLE_NAME + "("
@@ -42,7 +45,14 @@ public class StationsDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_DELETE =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
+    /**
+     * La façon dont on doit ordonner les stations
+     */
     private StationOrderBy orderBy;
+
+    /**
+     * Vrai si on doit ne récupérer que les stations favorites
+     */
     private boolean onlyStar;
 
     public StationsDbHelper(Context context) {
@@ -70,6 +80,12 @@ public class StationsDbHelper extends SQLiteOpenHelper {
         return values;
     }
 
+    /**
+     * Récupère toutes les stations d'un curseur
+     *
+     * @param c le curseur qui contient les stations
+     * @return les stations
+     */
     private static ArrayList<Station> cursorToStationList(Cursor c) {
         ArrayList<Station> stations = new ArrayList<Station>();
         Station station;
@@ -106,27 +122,22 @@ public class StationsDbHelper extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
+    /**
+     * Récupère toutes les stations
+     *
+     * @return l'ensemble des stations de la base de données
+     */
     public ArrayList<Station> getAllStations() {
         SQLiteDatabase db = getReadableDatabase();
         Cursor c = db.query(TABLE_NAME, null, null, null, null, null, null);
         return cursorToStationList(c);
     }
 
-    public ArrayList<Station> getStarredStations() {
-        SQLiteDatabase db = getReadableDatabase();
-        String selection = STAR + " = ?";
-        String[] selectionValues = {"1"};
-        Cursor c = db.query(
-                TABLE_NAME,
-                null,
-                selection,
-                selectionValues,
-                null,
-                null,
-                null);
-        return cursorToStationList(c);
-    }
-
+    /**
+     * Récuère les stations en fonction de order et onlyStar
+     *
+     * @return les stations ordonnées par <code>order</code>, et qui sont des favorites si <code>onlyStar</code> == true
+     */
     public ArrayList<Station> getStations() {
         SQLiteDatabase db = getReadableDatabase();
         String selection = null;
@@ -153,17 +164,12 @@ public class StationsDbHelper extends SQLiteOpenHelper {
         return cursorToStationList(c);
     }
 
-    public List<Station> getSearchedStations(String search) {
-        return null;
-    }
-
-    public void addStations(List<Station> stations) {
-        SQLiteDatabase db = getWritableDatabase();
-        for (Station s : stations) {
-            addStation(db, s);
-        }
-    }
-
+    /**
+     * Ajoute une station dans la base de données
+     *
+     * @param db
+     * @param station
+     */
     private void addStation(SQLiteDatabase db, Station station) {
         db.insert(
                 TABLE_NAME,
@@ -172,6 +178,12 @@ public class StationsDbHelper extends SQLiteOpenHelper {
         );
     }
 
+    /**
+     * Sauvegarde les stations<br/>
+     * Ajoute la station si elle n'existe pas en base de données, update cette station sinon.
+     *
+     * @param stations
+     */
     public void saveStations(List<Station> stations) {
         SQLiteDatabase db = getWritableDatabase();
         for (Station s : stations) {

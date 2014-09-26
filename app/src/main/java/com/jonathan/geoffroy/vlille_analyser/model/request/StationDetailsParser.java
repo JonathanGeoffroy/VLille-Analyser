@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 /**
+ * Parse le XML de VLille permettant de récupérer les détails d'une station<br/>
+ * <p/>
  * Created by geoffroy on 15/09/14.
  */
 public class StationDetailsParser {
@@ -32,6 +34,13 @@ public class StationDetailsParser {
         this.client = client;
     }
 
+    /**
+     * Lance une réquête sur <code>STATION_DETAILS_URL</code>.<br/>
+     * Parse les données XML récupérées afin de trouver les détails de la station
+     *
+     * @throws IOException            en cas de problème réseau
+     * @throws XmlPullParserException si il est impossible de parser le résultat obtenu
+     */
     public void execute(Station station) throws IOException, XmlPullParserException {
         HttpGet httpGet = new HttpGet(STATION_DETAILS_URL + station.getId());
         HttpResponse response = client.execute(httpGet);
@@ -61,29 +70,27 @@ public class StationDetailsParser {
 
     private void parseStationDetails(XmlPullParser parser, Station station) throws XmlPullParserException, IOException {
         int event = parser.getEventType();
-        while (event != XmlPullParser.END_DOCUMENT)
-        {
-            String name=parser.getName();
-            switch (event){
+        while (event != XmlPullParser.END_DOCUMENT) {
+            String name = parser.getName();
+            switch (event) {
                 case XmlPullParser.START_TAG:
-                    if(name.equals("bikes")) {
+                    if (name.equals("bikes")) {
                         event = parser.next();
-                        if(event == XmlPullParser.TEXT) {
+                        if (event == XmlPullParser.TEXT) {
                             String text = parser.getText();
                             try {
                                 station.setNbBikes(Integer.parseInt(text));
-                            } catch(Exception e) {
+                            } catch (Exception e) {
                                 Log.e("John", "enable to parse int: " + text);
                             }
                         }
-                    }
-                    else if(name.equals("attachs")) {
+                    } else if (name.equals("attachs")) {
                         event = parser.next();
-                        if(event == XmlPullParser.TEXT) {
+                        if (event == XmlPullParser.TEXT) {
                             String text = parser.getText();
                             try {
                                 station.setNbFree(Integer.parseInt(text));
-                            } catch(Exception e) {
+                            } catch (Exception e) {
                                 Log.e("Parser", "enable to parse int: " + text);
                             }
                         }
