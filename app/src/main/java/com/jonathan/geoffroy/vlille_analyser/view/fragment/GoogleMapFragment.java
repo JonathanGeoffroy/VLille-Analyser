@@ -3,7 +3,6 @@ package com.jonathan.geoffroy.vlille_analyser.view.fragment;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,13 @@ import android.view.ViewGroup;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.jonathan.geoffroy.vlille_analyser.R;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
 import com.jonathan.geoffroy.vlille_analyser.view.activity.StationsActivity;
 
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -30,9 +31,10 @@ import java.util.List;
 public class GoogleMapFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private MapView mapView;
+    private List<Marker> markers;
 
     public GoogleMapFragment() {
-        // Required empty public constructor
+        markers = new LinkedList<Marker>();
     }
 
     /**
@@ -41,7 +43,6 @@ public class GoogleMapFragment extends Fragment {
      *
      * @return A new instance of fragment GoogleMapFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static GoogleMapFragment newInstance() {
         GoogleMapFragment fragment = new GoogleMapFragment();
         return fragment;
@@ -68,23 +69,39 @@ public class GoogleMapFragment extends Fragment {
         addStations();
     }
 
+    public void notifyStationUpdated(Station station) {
+        StationsActivity activity = (StationsActivity) getActivity();
+        List<Station> stations = activity.getStations();
+        int position = stations.indexOf(station);
+        if (position < markers.size()) {
+            Marker marker = markers.get(position);
+            marker.setSnippet(station.getNbBikes() + "bikes, " + station.getNbFree() + " free");
+        } else {
+            addMarker(mapView.getMap(), station);
+        }
+    }
+
     private void addStations() {
         StationsActivity activity = (StationsActivity) getActivity();
         List<Station> stations = activity.getStations();
 
         GoogleMap map = mapView.getMap();
         map.clear();
-
+        markers.clear();
+        Marker marker;
         for (Station station : stations) {
-            Log.i("VLille-Map", "" + station.getName() + " -> " + station.getPosition());
-
-            map.addMarker(
-                    new MarkerOptions()
-                            .position(station.getPosition())
-                            .title(station.getName())
-                            .snippet(station.getNbBikes() + "bikes, " + station.getNbFree() + " free")
-            );
+            addMarker(map, station);
         }
+    }
+
+    private void addMarker(GoogleMap map, Station station) {
+        Marker marker = map.addMarker(
+                new MarkerOptions()
+                        .position(station.getPosition())
+                        .title(station.getName())
+                        .snippet(station.getNbBikes() + "bikes, " + station.getNbFree() + " free")
+        );
+        markers.add(marker);
     }
 
     @Override

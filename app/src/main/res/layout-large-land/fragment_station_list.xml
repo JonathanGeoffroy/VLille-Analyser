@@ -10,18 +10,16 @@
         android:id="@+id/stationsOptionsFragment"
         android:name="com.jonathan.geoffroy.vlille_analyser.view.fragment.StationsOptionsFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal" />
 
     <GridView
         android:id="@android:id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginLeft="50sp"
+        android:layout_marginRight="50sp"
+        android:horizontalSpacing="30sp"
         android:numColumns="2" />
-
-    <TextView
-        android:id="@android:id/empty"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center" />
 
 </LinearLayout>

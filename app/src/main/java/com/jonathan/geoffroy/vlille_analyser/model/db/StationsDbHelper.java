@@ -9,6 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.jonathan.geoffroy.vlille_analyser.model.Station;
+import com.jonathan.geoffroy.vlille_analyser.model.StationOrderBy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +42,13 @@ public class StationsDbHelper extends SQLiteOpenHelper {
     private static final String DATABASE_DELETE =
             "DROP TABLE IF EXISTS " + TABLE_NAME;
 
+    private StationOrderBy orderBy;
+    private boolean onlyStar;
+
     public StationsDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        orderBy = StationOrderBy.NAME;
+        onlyStar = false;
     }
 
     /**
@@ -121,6 +127,32 @@ public class StationsDbHelper extends SQLiteOpenHelper {
         return cursorToStationList(c);
     }
 
+    public ArrayList<Station> getStations() {
+        SQLiteDatabase db = getReadableDatabase();
+        String selection = null;
+        String[] values = null;
+
+        // Select only starred stations if needed
+        if (onlyStar) {
+            selection = STAR + " = ?";
+            values = new String[1];
+            values[0] = "1";
+        }
+
+        // Order the result
+        String orderByDb = orderBy.getOrder();
+
+        Cursor c = db.query(
+                TABLE_NAME,
+                null,
+                selection,
+                values,
+                null,
+                null,
+                orderByDb);
+        return cursorToStationList(c);
+    }
+
     public List<Station> getSearchedStations(String search) {
         return null;
     }
@@ -166,5 +198,13 @@ public class StationsDbHelper extends SQLiteOpenHelper {
                 stationValues,
                 selection,
                 selectionArgs);
+    }
+
+    public void setOrderBy(StationOrderBy orderBy) {
+        this.orderBy = orderBy;
+    }
+
+    public void setOnlyStar(boolean onlyStar) {
+        this.onlyStar = onlyStar;
     }
 }

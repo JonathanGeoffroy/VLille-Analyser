@@ -7,7 +7,6 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -172,13 +171,12 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
     @Override
     public void notifyStationUpdated(Station station) {
         stationFragment.notifyStationsChanged();
-        googleMapFragment.notifyStationsChanged();
+        googleMapFragment.notifyStationUpdated(station);
         db.updateStation(station);
     }
 
     @Override
     public void notifyAllStationsUpdated() {
-        Log.i("VLille-IHM", "All stations have been updated");
         stationFragment.notifyStationsChanged();
         googleMapFragment.notifyStationsChanged();
         for (Station station : stations) {
@@ -194,7 +192,6 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
 
     @Override
     public void onAutomaticRefreshChanged(boolean isChecked) {
-        Log.i("VLille-IHM", "AutomaticRefreshChanged");
         if (isChecked) {
             refresher = new AllStationsDetailsRefresher(this);
             refresher.enableRefreshing(TIME_TO_REFRESH_STATIONS);
@@ -205,16 +202,15 @@ public class VLilleActivity extends StationsActivity implements ActionBar.TabLis
 
     @Override
     public void onOrderByChanged(StationOrderBy orderBy) {
-
+        db.setOrderBy(orderBy);
+        stations = db.getStations();
+        notifyAllStationsUpdated();
     }
 
     @Override
     public void onOnlyStarChanged(boolean isChecked) {
-        if (!isChecked) {
-            stations = db.getAllStations();
-        } else {
-            stations = db.getStarredStations();
-        }
+        db.setOnlyStar(isChecked);
+        stations = db.getStations();
         notifyAllStationsUpdated();
     }
 

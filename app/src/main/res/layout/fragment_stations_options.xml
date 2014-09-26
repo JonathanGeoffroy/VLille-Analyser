@@ -7,7 +7,8 @@
     <CheckBox
         android:id="@+id/automaticRefresh_cb"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="@string/automaticRefreshing" />
 
     <RadioGroup
         android:id="@+id/orderBy_group"
@@ -19,19 +20,13 @@
             android:id="@+id/orderBy_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="A" />
+            android:text="@string/orderBy_name" />
 
         <RadioButton
             android:id="@+id/orderBy_starFirst"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="S" />
-
-        <RadioButton
-            android:id="@+id/orderBy_nearby"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="L" />
+            android:text="@string/orderBy_starFirst" />
     </RadioGroup>
 
     <CheckBox

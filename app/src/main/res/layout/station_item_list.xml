@@ -24,19 +24,44 @@
             android:button="@android:drawable/btn_star"
             android:focusable="false" />
 
-        <TextView
-            android:id="@+id/nbbikes_textview"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:focusable="false" />
+            android:layout_weight="0.1">
 
-        <TextView
-            android:id="@+id/nbfree_textview"
+            <TextView
+                android:id="@+id/nbbikes_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:focusable="false"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="@string/bikes" />
+        </LinearLayout>
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0.1"
-            android:focusable="false" />
+            android:layout_weight="0.1">
 
+            <TextView
+                android:id="@+id/nbfree_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="2dp"
+                android:focusable="false"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:text="@string/free" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
