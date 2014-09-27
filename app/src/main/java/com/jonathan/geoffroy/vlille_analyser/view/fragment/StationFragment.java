@@ -24,7 +24,7 @@ import java.util.List;
  * Large screen devices (such as tablets) are supported by replacing the ListView
  * with a GridView.
  * <p/>
- * Activities containing this fragment MUST implement the {@link Callbacks}
+ * Activities containing this fragment MUST implement the {@link OnStationFragmentInteractionListener}
  * interface.
  */
 public class StationFragment extends Fragment implements AbsListView.OnItemClickListener {
@@ -110,7 +110,9 @@ public class StationFragment extends Fragment implements AbsListView.OnItemClick
     public void notifyStationsChanged() {
         StationsActivity activity = (StationsActivity) getActivity();
         List<Station> list = activity.getStations();
-        mAdapter.setList(list);
+        if(mAdapter != null) {
+            mAdapter.setList(list);
+        }
     }
 
     /**
