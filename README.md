@@ -3,7 +3,7 @@ VLille-Analyser
 
 # Vue d'ensemble #
 
-Ce projet est une application Android permettant de visualiser les vélos [VLille (http://www.vlille.fr/)] sur l'ensemble de réseau.  
+Ce projet est une application Android permettant de visualiser les vélos [VLille](http://www.vlille.fr/) sur l'ensemble de réseau.  
 Ce projet est avant tout un projet étudiant permettant d'appréhender différents aspects du développement d'applications Android; c'est pourquoi l'application n'est pas disponible sur le google play.
 
 ## Fonctionnalités ##
@@ -38,19 +38,36 @@ Ci dessous diférents screenshots montrant les différentes fonctionnalités sur
  	* options de la liste. Ce dernier fragment permet de ne pas duppliquer le code pour les différentes vues smartphone et tablette.
 
 ### Smartphone ###
+Liste toutes les stations (mode portrait)  
 ![](docs/smartphone/stationList_portrait.png)  
+
+Liste toutes les stations (mode lanscape)  
 ![](docs/smartphone/stationList_landscape.png)  
+
+MapView de toutes les stations (mode portrait)  
 ![](docs/smartphone/mapview_portrait.png)  
+
+MapView de toutes les stations (mode landscape). Les details pour la station choisie est affichée  
 ![](docs/smartphone/mapview_landscape.png)  
 
 ### Tablette ###
-![](docs/tablet/mapview_landscape_all.png)  
-![](docs/tablet/stationList_landscape_all.png)  
+Liste toutes les stations (mode portrait)  
 ![](docs/tablet/stationList_portait_all.png)  
-![](docs/tablet/mapview_landscape_stars.png)  
-![](docs/tablet/stationList_landscape_star.png)  
+
+Liste toutes les stations (mode landscape). Affiche les stations sur deux colonnes.   
+![](docs/tablet/stationList_landscape_all.png)  
+
+Liste les stations favorites (mode portrait).  
 ![](docs/tablet/stationList_portait_stars.png)  
 
+Liste les stations favorites (mode landscape).  
+![](docs/tablet/stationList_landscape_star.png) 
+
+MapView de toutes les stations.  
+![](docs/tablet/mapview_landscape_all.png)  
+
+MapView des stations favorites.  
+![](docs/tablet/mapview_landscape_stars.png)  
 
 ## Conception ##
 
