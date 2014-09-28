@@ -22,11 +22,6 @@ import com.jonathan.geoffroy.vlille_analyser.view.fragment.StationFragment;
 
 import java.util.Locale;
 
-// christophe.ribeiro@inria.fr
-// Deadline: lundi 29
-// XP Android ?
-// Screen-shots,
-// lien github
 public class VLilleActivity extends StationsActivity implements ActionBar.TabListener {
     private static final short TIME_TO_REFRESH_STATIONS = 10;
     /**
